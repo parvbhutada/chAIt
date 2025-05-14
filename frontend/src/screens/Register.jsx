@@ -37,10 +37,10 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300">
+      {/* Header Content */}
       <header className="w-full py-6 px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-3 group">
-            <FaRobot className="h-8 w-8 text-blue-600 group-hover:text-blue-500 transition-colors duration-200" />
             <div className="flex items-baseline">
               <span className="text-2xl font-bold text-slate-800">ch</span>
               <span className="text-2xl font-bold text-blue-600">AI</span>
@@ -50,17 +50,23 @@ const Register = () => {
         </div>
       </header>
 
+      {/* Main Content */}
       <div className="flex-1 flex items-center justify-center px-8 py-12">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-slate-800 mb-2">Create Account</h1>
-            <p className="text-slate-600">Join us and start your journey</p>
+            <h1 className="text-4xl font-bold text-slate-900 mb-2">
+              Create Account
+            </h1>
+            <p className="text-slate-800">Join us to Code, Collab & Chat</p>
           </div>
 
           <div className="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-slate-200">
             <form onSubmit={submitHandler} className="space-y-6">
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700" htmlFor="email">
+                <label
+                  className="block text-sm font-medium text-slate-700"
+                  htmlFor="email"
+                >
                   Email Address
                 </label>
                 <div className="relative">
@@ -79,7 +85,10 @@ const Register = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-700" htmlFor="password">
+                <label
+                  className="block text-sm font-medium text-slate-700"
+                  htmlFor="password"
+                >
                   Password
                 </label>
                 <div className="relative">
@@ -107,7 +116,7 @@ const Register = () => {
                 ) : (
                   <>
                     <FaUserPlus className="h-5 w-5" />
-                    <span>Create Account</span>
+                    <span>Sign Up</span>
                   </>
                 )}
               </button>
