@@ -1,70 +1,134 @@
-import React, { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from '../config/axios.js';
-import { UserContext } from '../context/user.context.jsx';
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "../config/axios.js";
+import { UserContext } from "../context/user.context.jsx";
+import { FaEnvelope, FaLock, FaUserPlus, FaRobot } from "react-icons/fa";
 
 const Register = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-    const setUser = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  function submitHandler(e) {
+    e.preventDefault();
+    setIsLoading(true);
 
-    function submitHandler(e) {
-        e.preventDefault();
+    axios
+      .post("/users/register", {
+        email,
+        password,
+      })
+      .then((res) => {
+        console.log(res.data);
+        localStorage.setItem("token", res.data.token);
+        setUser(res.data.user);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
 
-        axios.post('/users/register', {
-            email,
-            password
-        }).then((res) => {
-            console.log(res.data);
-            localStorage.setItem('token', res.data.token);
-            setUser(res.data.user);
-            navigate('/');
-        }).catch((err) => {
-            console.log(err.response.data);
-        });        
-    }
-    
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-900">
-            <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
-                <h2 className="text-2xl font-bold text-white mb-6">Register</h2>
-                <form onSubmit={submitHandler}>
-                    <div className="mb-4">
-                        <label className="block text-gray-400 mb-2" htmlFor="email">Email</label>
-                        <input
-                            onChange={(e) => setEmail(e.target.value)}
-                            type="email"
-                            id="email"
-                            className="w-full p-3 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter your email"
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <label className="block text-gray-400 mb-2" htmlFor="password">Password</label>
-                        <input
-                            onChange={(e) => setPassword(e.target.value)}
-                            type="password"
-                            id="password"
-                            className="w-full p-3 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Enter your password"
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full p-3 rounded bg-green-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        Register
-                    </button>
-                </form>
-                <p className="text-gray-400 mt-4">
-                    Already have an account? <Link to="/login" className="text-blue-500 hover:underline">Login</Link>
-                </p>
+  return (
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300">
+      <header className="w-full py-6 px-8">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <Link to="/" className="flex items-center space-x-3 group">
+            <FaRobot className="h-8 w-8 text-blue-600 group-hover:text-blue-500 transition-colors duration-200" />
+            <div className="flex items-baseline">
+              <span className="text-2xl font-bold text-slate-800">ch</span>
+              <span className="text-2xl font-bold text-blue-600">AI</span>
+              <span className="text-2xl font-bold text-slate-800">t</span>
             </div>
+          </Link>
         </div>
-    )
-}
+      </header>
 
-export default Register
+      <div className="flex-1 flex items-center justify-center px-8 py-12">
+        <div className="w-full max-w-md">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-slate-800 mb-2">Create Account</h1>
+            <p className="text-slate-600">Join us and start your journey</p>
+          </div>
+
+          <div className="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-slate-200">
+            <form onSubmit={submitHandler} className="space-y-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-slate-700" htmlFor="email">
+                  Email Address
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FaEnvelope className="h-5 w-5 text-slate-400" />
+                  </div>
+                  <input
+                    onChange={(e) => setEmail(e.target.value)}
+                    type="email"
+                    id="email"
+                    className="w-full pl-10 p-3 rounded-lg bg-white text-slate-800 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    placeholder="Enter your email"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-slate-700" htmlFor="password">
+                  Password
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FaLock className="h-5 w-5 text-slate-400" />
+                  </div>
+                  <input
+                    onChange={(e) => setPassword(e.target.value)}
+                    type="password"
+                    id="password"
+                    className="w-full pl-10 p-3 rounded-lg bg-white text-slate-800 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    placeholder="Create a password"
+                    required
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="w-full flex items-center justify-center gap-2 p-3 rounded-lg bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isLoading ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <>
+                    <FaUserPlus className="h-5 w-5" />
+                    <span>Create Account</span>
+                  </>
+                )}
+              </button>
+            </form>
+
+            <div className="mt-6 text-center">
+              <p className="text-slate-600">
+                Already have an account?{" "}
+                <Link
+                  to="/login"
+                  className="text-blue-600 hover:text-blue-500 font-medium transition-colors duration-200"
+                >
+                  Sign in
+                </Link>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Register;
